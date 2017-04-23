@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>响应式网页</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/window.js"></script>
+</head>
+<body id="base">
+<div class="contain">
+    <nav class="nav-global" id="nav_global">
+        <div class="nav-1-content">
+            <div class="blog-name">
+                <span>Pollo的个人网站</span>
+            </div>
+        </div>
+        <div class="nav-2">
+            <div class="nav-2-content">
+                <ul class="nav-2-list">
+                    <li class="nav-2-item nav-item-menu nav-item-home">
+                        <a class="nav-link nav-link-home" href="#">
+                    <span class="nav-link-text">
+                        Home
+                    </span>
+                        </a>
+                    </li>
+                    <li class="nav-2-item nav-item-menu nav-item-github">
+                        <a class="nav-link nav-link-github" href="#">
+                    <span class="nav-link-text">
+                        GitHub
+                    </span>
+                        </a>
+                    </li>
+                    <li class="nav-2-item">
+                        <a class="nav-link nav-link-zhihu" href="#">
+                    <span class="nav-link-text">
+                        ZhiHu
+                    </span>
+                        </a>
+                    </li>
+                    <li class="nav-2-item">
+                        <a class="nav-link nav-link-douban" href="#">
+                    <span class="nav-link-text">
+                        DouBan
+                    </span>
+                        </a>
+                    </li>
+                    <li class="nav-2-item">
+                        <a class="nav-link nav-link-weibo" href="#">
+                    <span class="nav-link-text">
+                        WeiBo
+                    </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="content" id="content" style="height: 2251px;">
+        <div class="left-area">
+            <div class="left-flex">
+                <div class="personal-info">
+                    <div class="img-head">
+                        <img src="src/head.jpg" alt="头像"/>
+                    </div>
+                    <div class="name">
+                        Pollo Cao
+                    </div>
+                    <div class="job-name">
+                        Front End Developer
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="right-flex">
+                <div>
+                    <h3>一段有趣的代码引发的思考</h3>
+                </div>
+                <div>
+                <span>今天无意间看见一个有趣的代码，
+                    原本以为直接就看出了结果，
+                    谁知道发现自己预测的结果与运行的结果并不一样，
+                    我们先来看看一下代码吧
+                </span>
+                </div>
+                <div>
+                    <h4>
+                        下面就是这段有趣的代码
+                    </h4>
+                </div>
+                <div class="code">
+                <pre>var foo = {n:1};
+(function(foo){
+    console.log(foo.n);
+    foo.n = 3;
+    var foo = {n:2}
+    console.log(foo.n);
+})(foo);
+console.log(foo.n);</pre>
+                </div>
+                <div>
+                    上面的代码会输出：
+                    1,2,3
+                </div>
+                <div class="col-mt-1">
+                    如果你一眼就看出来输出的是1, 2, 3 , 那么就没必要往下看了，反正当我看到运行结果的时候吓了我一跳，怎么会。
+                </div>
+                <div>
+                    <h4>分析</h4>
+                </div>
+                <div>
+                    首先我们用对象字面呈的方式定义了一个对象foo，
+                    然后是一个立即执行函数，
+                    传入的参数就是我们一开始定义的foo对象，
+                    然后在这个立即执行函数里面我们也定义了一个局部变虽，
+                    这个局部变虽也叫作foo，
+                    而且是那var声明的，
+                    所以这时候var声明的这个foo就会发生变呈的声明提升，
+                    按照原来来说这时候理机执行函数里应该是这样的
+                </div>
+                <div class="code">
+                <pre>(function(foo){
+    var foo;
+    console.log(foo.n);
+    foo.n = 3;
+    var foo = {n:2}
+    console.log(foo.n);
+})(foo);</pre>
+                </div>
+                <div>
+                    我看到这里的时候第一个反应是这里的foo只是声明了啊，
+                    那么第一个console当然应该输出的undefined啊，
+                    然而这个console却输出了1，这是为什么呢，这
+                    就要知道变量的声明了，
+                    这里其实因为还传入了一个参数foo，
+                    而这个foo是已经定义了n=1的，
+                    其实这一段代码等于是在var foo;
+                    的上面还有一段隐藏的foo＝{n:1};
+                    这是后我们就需要测试一下了，
+                    重复声明回覆盖掉之前的值吗？
+                    可以运行一下下面这个小例子试一下
+                </div>
+                <div class="code">
+                    <pre>var a = "test";
+var a;
+console.log(a);</pre>
+                </div>
+                <div>
+                    这里的console.log(a)输出的是test并不是undefined。
+                    所以这里可以看出变量的声明和赋值时两回事，
+                    只有当在声明变量的时候没有给变量赋值，
+                    js引擎才会给这个变量赋一个undefined。
+                </div>
+                <div class="col-mt-1">
+                    那么第一个console就明确了，然后是foo.n=3,也就是说这时候对foo进行赋值了，
+                    那么它到底是对全局变量的赋值还是对局部变量的赋值呢？
+                    这里我觉得应该是这样的，因为这个foo前面没有加var,
+                    那我们知道如果在函数中不加var声明的变量，
+                    其实上就是全局变量，所以此时全局的foo.n = 3;
+                    下面的var foo = {n:2}因为前面有var声明所以是局部变量，
+                    所以第二个声明不去改变全局变量的值，第二个console的值是2，最后一个console的值是3.
+                </div>
+                <div class="col-mt-1 col-mb-1">
+                    <button class="btn btn-support">
+                        觉得文章不错？点击打赏~
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
